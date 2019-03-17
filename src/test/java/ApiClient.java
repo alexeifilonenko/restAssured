@@ -24,22 +24,25 @@ public class ApiClient {
 
     public void putRequestExampleTest() throws JSONException {
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("username", "a.filonenko@hypervsn.com");
-        jsonObject.put("password", "Filonen-ko.com");
-        System.out.println(jsonObject);
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("username", "a.filonenko@hypervsn.com");
+        requestBody.put("password", "Filonen-ko.com");
+        System.out.println(requestBody);
 
         RequestSpecification requets = RestAssured.given()
                 .header("Content-Type", "application/json")
-                .body(jsonObject.toString());
+                .body(requestBody.toString());
 
         Response response = requets.put(path);
 
 
+        int statusCode = response.getStatusCode();
+        int successCode = response.jsonPath().get("status");
 
-        JSONObject jsonResponse = new JSONObject(response);
-        String sessionToken = jsonResponse.getString("sessionToken");
-        System.out.println(sessionToken);
+               System.out.println(successCode);
+
+        JSONObject jsonResponse = new JSONObject(response.toString());
+        System.out.println(jsonResponse.getString("sessionToken"));
 
 //        Response response = given()
 //                .contentType("application/json")
