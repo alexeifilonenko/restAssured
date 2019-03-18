@@ -25,8 +25,8 @@ public class ApiClient {
     public void putRequestExampleTest() throws JSONException {
 
         JSONObject requestBody = new JSONObject();
-        requestBody.put("username", "a.filonenko@hypervsn.com");
-        requestBody.put("password", "Filonen-ko.com");
+        requestBody.put("username", "filonenko@hypervsn.com");
+        requestBody.put("password", "Filonenko.com");
         System.out.println(requestBody);
 
         RequestSpecification requets = RestAssured.given()
