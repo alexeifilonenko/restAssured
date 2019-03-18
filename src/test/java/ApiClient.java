@@ -25,8 +25,8 @@ public class ApiClient {
     public void putRequestExampleTest() throws JSONException {
 
         JSONObject requestBody = new JSONObject();
-        requestBody.put("username", "filonenko@hypervsn.com");
-        requestBody.put("password", "Filonenko.com");
+        requestBody.put("username", "a.filonenko@hypervsn.com");
+        requestBody.put("password", "Filonen-ko.com");
         System.out.println(requestBody);
 
         RequestSpecification requets = RestAssured.given()
@@ -39,12 +39,12 @@ public class ApiClient {
         int statusCode = response.getStatusCode();
         int successCode = response.jsonPath().get("status");
 
-        System.out.println(successCode);
+
 
 
        JSONObject jsonResponse = new JSONObject(response.asString());
-        System.out.println(jsonResponse);
-        System.out.println(jsonResponse.getJSONObject("message").getString("sessionToken"));
+
+       System.out.println(jsonResponse.getJSONObject("message").getString("sessionToken"));
        String sessionToken = jsonResponse.getJSONObject("message").getString("sessionToken");
     }
 
@@ -67,8 +67,14 @@ public class ApiClient {
         JSONObject defaultLocation = new JSONObject();
         defaultLocation.put("type", "Point");
         defaultLocation.put("coordinates", coordinates);
-        System.out.println(defaultLocation);
         requestBody.put("defaultLocation", defaultLocation);
+
+
+        JSONArray allowedPermissions = new JSONArray();
+        allowedPermissions.put(0, "user:user:create:general");
+
+        requestBody.put("allowedPermissions", allowedPermissions);
+
         System.out.println(requestBody);
 
 
