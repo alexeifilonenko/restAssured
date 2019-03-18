@@ -41,8 +41,8 @@ public class ApiClient {
 
                System.out.println(successCode);
 
-        JSONObject jsonResponse = new JSONObject(response.toString());
-        System.out.println(jsonResponse.getString("sessionToken"));
+               JSONObject jsonResponse = new JSONObject(response);
+        //System.out.println(jsonResponse.getString("sessionToken"));
 
 //        Response response = given()
 //                .contentType("application/json")
