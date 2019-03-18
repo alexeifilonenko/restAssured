@@ -3,6 +3,8 @@ public class Main {
         ApiClient apiClient = new ApiClient();
         apiClient.getRequestExampleTest();
 
-        apiClient.putRequestExampleTest();
+       // apiClient.putRequestExampleTest();
+
+        apiClient.createClient();
     }
 }
