@@ -14,15 +14,9 @@ import static io.restassured.RestAssured.given;
 public class ApiClient {
     public String sessionToken;
     private final String path = "https://stage-platform.kino-mo.com/api/admin/0/session";
+    private final String pathCreateClient = "https://stage-platform.kino-mo.com/api/admin/0/client";
 
-    public void getRequestExampleTest() {
-        Response response = get("http://restcountries.eu/rest/v1/name/uk");
-        JSONArray jsonResponse = new JSONArray(response.asString());
-        String capital = jsonResponse.getJSONObject(0).getString("capital");
-        System.out.println(capital);
-    }
-
-    public void putRequestExampleTest() throws JSONException {
+    public void putSessionToken() throws JSONException {
 
         JSONObject requestBody = new JSONObject();
         requestBody.put("username", "a.filonenko@hypervsn.com");
@@ -34,30 +28,25 @@ public class ApiClient {
                 .body(requestBody.toString());
 
         Response response = requets.put(path);
-
-
         int statusCode = response.getStatusCode();
         int successCode = response.jsonPath().get("status");
 
-
-
-
        JSONObject jsonResponse = new JSONObject(response.asString());
-
+       //System.out.println(jsonResponse);
        System.out.println(jsonResponse.getJSONObject("message").getString("sessionToken"));
        String sessionToken = jsonResponse.getJSONObject("message").getString("sessionToken");
     }
 
     public void createClient() {
         JSONObject requestBody = new JSONObject();
-        requestBody.put("name", "test123456789");
-        requestBody.put("legalName", "test123456789");
+        requestBody.put("name", "tes1t111213456719");
+        requestBody.put("legalName", "tes1t1213456789");
 
         JSONArray jsonArrayPhone = new JSONArray();
-        jsonArrayPhone.put(0, "+123456789");
+        jsonArrayPhone.put(0, "+1234156789");
 
         JSONArray jsonArrayEmail = new JSONArray();
-        jsonArrayEmail.put(0, "test123@test123.test123");
+        jsonArrayEmail.put(0, "te111st1123@test1123.test123");
 
         requestBody.put("phone", jsonArrayPhone);
         requestBody.put("email", jsonArrayEmail);
@@ -69,21 +58,22 @@ public class ApiClient {
         defaultLocation.put("coordinates", coordinates);
         requestBody.put("defaultLocation", defaultLocation);
 
-
         JSONArray allowedPermissions = new JSONArray();
         allowedPermissions.put(0, "user:user:create:general");
-
         requestBody.put("allowedPermissions", allowedPermissions);
-
         System.out.println(requestBody);
 
-
-
-       /* RequestSpecification requets = RestAssured.given()
+        RequestSpecification requets = RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("km-auth", sessionToken)
+                .header("km-auth", "ff21a8f3fc0c96dd49a020fe334699e1820771887c306fbd0c5e7f8d9191102f5bd6ff7701cf9b61d3becb48")
                 .body(requestBody.toString());
 
-        Response response = requets.put(path);*/
+        Response response = requets.put(pathCreateClient);
+
+        JSONObject jsonResponse = new JSONObject(response.asString());
+        System.out.println(jsonResponse);
+        String idClient = jsonResponse.getJSONObject("message").getString("_id");
+        System.out.println("Id created client " + idClient);
+
     }
 }
