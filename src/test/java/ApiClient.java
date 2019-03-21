@@ -12,41 +12,45 @@ import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 
 public class ApiClient {
-    public String sessionToken;
-    private final String path = "https://stage-platform.kino-mo.com/api/admin/0/session";
-    private final String pathCreateClient = "https://stage-platform.kino-mo.com/api/admin/0/client";
+    public String sessionToken = "9b64d6b8ef5288c57af9a4a308b15dc537514a5c81f3036b65537d85affcdc8c5bd6ff7701cf9b61d3becb48";
+    private final String baseUrl = "https://stage-platform.kino-mo.com";
+    private final String pathSession = "/api/admin/0/session";
+    private final String pathClient = "/api/admin/0/client/";
+    private String clientId;
 
-    public void putSessionToken() throws JSONException {
+
+    public String putSessionToken() throws JSONException {
 
         JSONObject requestBody = new JSONObject();
-        requestBody.put("username", "a.filonenko@hypervsn.com");
-        requestBody.put("password", "Filonen-ko.com");
+        requestBody.put("username", "filonenko@hypervsn.com");
+        requestBody.put("password", "Filonko.com");
         System.out.println(requestBody);
 
         RequestSpecification requets = RestAssured.given()
                 .header("Content-Type", "application/json")
                 .body(requestBody.toString());
 
-        Response response = requets.put(path);
+        Response response = requets.put(baseUrl + pathSession);
         int statusCode = response.getStatusCode();
         int successCode = response.jsonPath().get("status");
 
        JSONObject jsonResponse = new JSONObject(response.asString());
        //System.out.println(jsonResponse);
-       System.out.println(jsonResponse.getJSONObject("message").getString("sessionToken"));
+       System.out.println("sessionToken: " + sessionToken);
        String sessionToken = jsonResponse.getJSONObject("message").getString("sessionToken");
+       return sessionToken;
     }
 
-    public void createClient() {
+    public String createClient() {
         JSONObject requestBody = new JSONObject();
-        requestBody.put("name", "tes1t111213456719");
-        requestBody.put("legalName", "tes1t1213456789");
+        requestBody.put("name", "t1e1s11t111213456719");
+        requestBody.put("legalName", "te1s1t12134156789");
 
         JSONArray jsonArrayPhone = new JSONArray();
         jsonArrayPhone.put(0, "+1234156789");
 
         JSONArray jsonArrayEmail = new JSONArray();
-        jsonArrayEmail.put(0, "te111st1123@test1123.test123");
+        jsonArrayEmail.put(0, "te111st111123@test1123.test123");
 
         requestBody.put("phone", jsonArrayPhone);
         requestBody.put("email", jsonArrayEmail);
@@ -65,15 +69,30 @@ public class ApiClient {
 
         RequestSpecification requets = RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("km-auth", "ff21a8f3fc0c96dd49a020fe334699e1820771887c306fbd0c5e7f8d9191102f5bd6ff7701cf9b61d3becb48")
+                .header("km-auth", sessionToken)
                 .body(requestBody.toString());
 
-        Response response = requets.put(pathCreateClient);
+        Response response = requets.put(baseUrl + pathClient);
 
         JSONObject jsonResponse = new JSONObject(response.asString());
         System.out.println(jsonResponse);
-        String idClient = jsonResponse.getJSONObject("message").getString("_id");
-        System.out.println("Id created client " + idClient);
+        String clientId = jsonResponse.getJSONObject("message").getString("_id");
+        System.out.println("Id created client " + clientId);
+        return clientId;
+    }
+
+    public void getClientById(String clientId) {
+        RequestSpecification requets = RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("km-auth", "1d2db2836de5364c86a0933d35d8c9d0f526f71856a7d946627e41f9b80d38e55bd6ff7701cf9b61d3becb48");
+
+
+        Response response = requets.get(baseUrl + pathClient + clientId);
+        JSONObject jsonObject = new JSONObject(response.asString());
+        System.out.println(jsonObject);
+        List<Client> returnClient = Arrays.asList(response.getBody().as(Client[].class));
+
+        //System.out.println(returnClient);
 
     }
 }

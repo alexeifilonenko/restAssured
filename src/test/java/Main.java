@@ -4,6 +4,8 @@ public class Main {
 
        //apiClient.putSessionToken();
 
-        apiClient.createClient();
+        //apiClient.createClient();
+
+        apiClient.getClientById("5c9238330fb2d32bc288f1ea");
     }
 }
