@@ -28,7 +28,7 @@ public class ApiClient {
     public String putSessionToken() throws JSONException {
 
         JSONObject requestBody = new JSONObject();
-        requestBody.put("username", "filonenko@hypervsn.com");
+        requestBody.put("username", "fonenko@hypervsn.com");
         requestBody.put("password", "Filonko.com");
         System.out.println(requestBody);
 
