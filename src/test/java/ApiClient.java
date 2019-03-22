@@ -1,4 +1,5 @@
 import io.restassured.RestAssured;
+import io.restassured.config.ObjectMapperConfig;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -7,9 +8,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
+import com.google.gson.GsonBuilder;
 
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
+
+import static io.restassured.RestAssured.when;
+import static io.restassured.config.RestAssuredConfig.config;
+import static sun.net.ftp.impl.FtpClient.create;
 
 public class ApiClient {
     public String sessionToken = "9b64d6b8ef5288c57af9a4a308b15dc537514a5c81f3036b65537d85affcdc8c5bd6ff7701cf9b61d3becb48";
@@ -34,11 +40,11 @@ public class ApiClient {
         int statusCode = response.getStatusCode();
         int successCode = response.jsonPath().get("status");
 
-       JSONObject jsonResponse = new JSONObject(response.asString());
-       //System.out.println(jsonResponse);
-       System.out.println("sessionToken: " + sessionToken);
-       String sessionToken = jsonResponse.getJSONObject("message").getString("sessionToken");
-       return sessionToken;
+        JSONObject jsonResponse = new JSONObject(response.asString());
+        //System.out.println(jsonResponse);
+        System.out.println("sessionToken: " + sessionToken);
+        String sessionToken = jsonResponse.getJSONObject("message").getString("sessionToken");
+        return sessionToken;
     }
 
     public String createClient() {
@@ -55,7 +61,7 @@ public class ApiClient {
         requestBody.put("phone", jsonArrayPhone);
         requestBody.put("email", jsonArrayEmail);
 
-        List<Double> coordinates = new ArrayList<>(Arrays.asList(51.5073509,-0.12775829999998223));
+        List<Double> coordinates = new ArrayList<>(Arrays.asList(51.5073509, -0.12775829999998223));
 
         JSONObject defaultLocation = new JSONObject();
         defaultLocation.put("type", "Point");
@@ -82,17 +88,32 @@ public class ApiClient {
     }
 
     public void getClientById(String clientId) {
-        RequestSpecification requets = RestAssured.given()
+        /*RestAssured.config = RestAssured.config()
+                .objectMapperConfig(ObjectMapperConfig.objectMapperConfig()
+                        .gsonObjectMapperFactory( (type, charset) -> new GsonBuilder().create() ));*/
+
+        RequestSpecification requets = given()
+                .baseUri(baseUrl)
+                .basePath(pathClient + clientId)
                 .header("Content-Type", "application/json")
-                .header("km-auth", "1d2db2836de5364c86a0933d35d8c9d0f526f71856a7d946627e41f9b80d38e55bd6ff7701cf9b61d3becb48");
+                .header("km-auth", "d58736104ac1b62f240efcd069b502cd6c3ee12d17d0f8737ce274393a39f4b95bd6ff7701cf9b61d3becb48");
 
 
-        Response response = requets.get(baseUrl + pathClient + clientId);
+        Response response = requets.when().get();
+
+
         JSONObject jsonObject = new JSONObject(response.asString());
+        System.out.println(response.asString());
         System.out.println(jsonObject);
-        List<Client> returnClient = Arrays.asList(response.getBody().as(Client[].class));
+        //List<Client> returnClient = Arrays.asList(response.getBody().as(Client[].class));
+        String returnClient = jsonObject.getJSONObject("message").getString("_id");
+        System.out.println(returnClient);
 
-        //System.out.println(returnClient);
+        // List<Client> clientResponse = response.jsonPath().getList("message", Client.class);
+        //System.out.println(clientResponse);
+        Client client = response.jsonPath().getObject("message", Client.class);
+        System.out.println(client.get_id() + client.getName());
+
 
     }
 }

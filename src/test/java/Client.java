@@ -1,8 +1,10 @@
+import java.util.List;
+
 public class Client {
     private String _id;
     private String name;
     private String legalName;
-    private String email;
+    private List<String> email;
 
     public String get_id() {
         return _id;
@@ -28,11 +30,11 @@ public class Client {
         this.legalName = legalName;
     }
 
-    public String getEmail() {
+    public List<String> getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(List<String> email) {
         this.email = email;
     }
 }
