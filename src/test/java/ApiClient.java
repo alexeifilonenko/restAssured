@@ -26,8 +26,8 @@ public class ApiClient {
     public String putSessionToken() throws JSONException {
 
         JSONObject requestBody = new JSONObject();
-        requestBody.put("username", "nenko@hypervsn.com");
-        requestBody.put("password", "nen-ko.com");
+        requestBody.put("username", "lenko@hypervsn.com");
+        requestBody.put("password", "onen-ko.com");
         //System.out.println(requestBody);
 
         RequestSpecification requets = RestAssured.given()
@@ -45,14 +45,14 @@ public class ApiClient {
 
     public String createClient() {
         JSONObject requestBody = new JSONObject();
-        requestBody.put("name", "t11e1s111");
-        requestBody.put("legalName", "t1e11s");
+        requestBody.put("name", "t11e1s22111");
+        requestBody.put("legalName", "t1e1122s");
 
         JSONArray jsonArrayPhone = new JSONArray();
         jsonArrayPhone.put(0, "+1234156789");
 
         JSONArray jsonArrayEmail = new JSONArray();
-        jsonArrayEmail.put(0, "te111113@test1123.test123");
+        jsonArrayEmail.put(0, "te12211113@test1123.test123");
 
         requestBody.put("phone", jsonArrayPhone);
         requestBody.put("email", jsonArrayEmail);
@@ -79,11 +79,11 @@ public class ApiClient {
         JSONObject jsonResponse = new JSONObject(response.asString());
         //System.out.println(jsonResponse);
         clientId = jsonResponse.getJSONObject("message").getString("_id");
-        System.out.println("Id created client: " + clientId);
+        System.out.println("ID created client: " + clientId);
         return clientId;
     }
 
-    public void getClientById(String clientId) {
+    public void getClientById() {
 
         RequestSpecification requets = given()
                 .baseUri(baseUrl)
